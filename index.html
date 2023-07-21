@@ -10,6 +10,22 @@
         font-size: 24px;
     }
 
+    .hint {
+        color: orangered;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .dropdown {
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        padding: 4px;
+    }
+
     .time {
         font-size: 24px;
         margin-top: 16px;
@@ -17,87 +33,76 @@
 </style>
 <script>
 
-let tzs = [
-    {"label":"(GMT-12:00) International Date Line West","value":"-12"},
-    {"label":"(GMT-11:00) Midway Island, Samoa","value":"-11"},
-    {"label":"(GMT-10:00) Hawaii","value":"-10"},
-    {"label":"(GMT-09:00) Alaska","value":"-9"},
-    {"label":"(GMT-08:00) Pacific Time (US & Canada)","value":"-8"},
-    {"label":"(GMT-08:00) Tijuana, Baja California","value":"-8"},
-    {"label":"(GMT-07:00) Arizona","value":"-7"},
-    {"label":"(GMT-07:00) Chihuahua, La Paz, Mazatlan","value":"-7"},
-    {"label":"(GMT-07:00) Mountain Time (US & Canada)","value":"-7"},
-    {"label":"(GMT-06:00) Central America","value":"-6"},
-    {"label":"(GMT-06:00) Central Time (US & Canada)","value":"-6"},
-    {"label":"(GMT-05:00) Bogota, Lima, Quito, Rio Branco","value":"-5"},
-    {"label":"(GMT-05:00) Eastern Time (US & Canada)","value":"-5"},
-    {"label":"(GMT-05:00) Indiana (East)","value":"-5"},
-    {"label":"(GMT-04:00) Atlantic Time (Canada)","value":"-4"},
-    {"label":"(GMT-04:00) Caracas, La Paz","value":"-4"},
-    {"label":"(GMT-04:00) Manaus","value":"-4"},
-    {"label":"(GMT-04:00) Santiago","value":"-4"},
-    {"label":"(GMT-03:30) Newfoundland","value":"-3.5"},
-    {"label":"(GMT-03:00) Brasilia","value":"-3"},
-    {"label":"(GMT-03:00) Buenos Aires, Georgetown","value":"-3"},
-    {"label":"(GMT-03:00) Greenland","value":"-3"},
-    {"label":"(GMT-03:00) Montevideo","value":"-3"},
-    {"label":"(GMT-02:00) Mid-Atlantic","value":"-2"},
-    {"label":"(GMT-01:00) Cape Verde Is.","value":"-1"},
-    {"label":"(GMT-01:00) Azores","value":"-1"},
-    {"label":"(GMT+00:00) Casablanca, Monrovia, Reykjavik","value":"0"},
-    {"label":"(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London","value":"0"},
-    {"label":"(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna","value":"1"},
-    {"label":"(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague","value":"1"},
-    {"label":"(GMT+01:00) Brussels, Copenhagen, Madrid, Paris","value":"1"},
-    {"label":"(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb","value":"1"},
-    {"label":"(GMT+01:00) West Central Africa","value":"1"},
-    {"label":"(GMT+02:00) Amman","value":"2"},
-    {"label":"(GMT+02:00) Athens, Bucharest, Istanbul","value":"2"},
-    {"label":"(GMT+02:00) Beirut","value":"2"},
-    {"label":"(GMT+02:00) Cairo","value":"2"},
-    {"label":"(GMT+02:00) Harare, Pretoria","value":"2"},
-    {"label":"(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius","value":"2"},
-    {"label":"(GMT+02:00) Jerusalem","value":"2"},
-    {"label":"(GMT+02:00) Minsk","value":"2"},
-    {"label":"(GMT+02:00) Windhoek","value":"2"},
-    {"label":"(GMT+03:00) Kuwait, Riyadh, Baghdad","value":"3"},
-    {"label":"(GMT+03:00) Moscow, St. Petersburg, Volgograd","value":"3"},
-    {"label":"(GMT+03:00) Nairobi","value":"3"},
-    {"label":"(GMT+03:00) Tbilisi","value":"3"},
-    {"label":"(GMT+03:30) Tehran","value":"3.5"},
-    {"label":"(GMT+04:00) Abu Dhabi, Muscat","value":"4"},
-    {"label":"(GMT+04:00) Baku","value":"4"},
-    {"label":"(GMT+04:00) Yerevan","value":"4"},
-    {"label":"(GMT+04:30) Kabul","value":"4.5"},
-    {"label":"(GMT+05:00) Yekaterinburg","value":"5"},
-    {"label":"(GMT+05:00) Islamabad, Karachi, Tashkent","value":"5"},
-    {"label":"(GMT+05:30) Sri Jayawardenapura","value":"5.5"},
-    {"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi","value":"5.5"},
-    {"label":"(GMT+05:45) Kathmandu","value":"5.75"},
-    {"label":"(GMT+06:00) Almaty, Novosibirsk","value":"6"},{"label":"(GMT+06:00) Astana, Dhaka","value":"6"},
-    {"label":"(GMT+06:30) Yangon (Rangoon)","value":"6.5"},
-    {"label":"(GMT+07:00) Bangkok, Hanoi, Jakarta","value":"7"},
-    {"label":"(GMT+07:00) Krasnoyarsk","value":"7"},
-    {"label":"(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi","value":"8"},
-    {"label":"(GMT+08:00) Kuala Lumpur, Singapore","value":"8"},
-    {"label":"(GMT+08:00) Irkutsk, Ulaan Bataar","value":"8"},
-    {"label":"(GMT+08:00) Perth","value":"8"},
-    {"label":"(GMT+08:00) Taipei","value":"8"},
-    {"label":"(GMT+09:00) Osaka, Sapporo, Tokyo","value":"9"},
-    {"label":"(GMT+09:00) Seoul","value":"9"},
-    {"label":"(GMT+09:00) Yakutsk","value":"9"},
-    {"label":"(GMT+09:30) Adelaide","value":"9.5"},
-    {"label":"(GMT+09:30) Darwin","value":"9.5"},
-    {"label":"(GMT+10:00) Brisbane","value":"10"},
-    {"label":"(GMT+10:00) Canberra, Melbourne, Sydney","value":"10"},
-    {"label":"(GMT+10:00) Hobart","value":"10"},
-    {"label":"(GMT+10:00) Guam, Port Moresby","value":"10"},
-    {"label":"(GMT+10:00) Vladivostok","value":"10"},
-    {"label":"(GMT+11:00) Magadan, Solomon Is., New Caledonia","value":"11"},
-    {"label":"(GMT+12:00) Auckland, Wellington","value":"12"},
-    {"label":"(GMT+12:00) Fiji, Kamchatka, Marshall Is.","value":"12"},
-    {"label":"(GMT+13:00) Nuku'alofa","value":"13"}
+let timezones = [
+    {"label":"(GMT-12:00) International Date Line West","value":-12},
+    {"label":"(GMT-11:00) Midway Island, Samoa","value":-11},
+    {"label":"(GMT-10:00) Hawaii","value":-10},
+    {"label":"(GMT-09:00) Alaska","value":-9},
+    {"label":"(GMT-08:00) Pacific Time (US & Canada), Tijuana, Baja California","value":-8},
+    {"label":"(GMT-07:00) Arizona, Mountain Time (US & Canada)","value":-7},
+    {"label":"(GMT-06:00) Central Time (US & Canada)","value":-6},
+    {"label":"(GMT-05:00) Eastern Time (US & Canada), Bogota, Lima, Quito, Rio Branco","value":-5},
+    {"label":"(GMT-04:00) Atlantic Time (Canada), Caracas, La Paz, Manaus, Santiago","value":-4},
+    {"label":"(GMT-03:30) Newfoundland","value":-3.5},
+    {"label":"(GMT-03:00) Brasilia, Buenos Aires, Georgetown, Greenland, Montevideo","value":-3},
+    {"label":"(GMT-02:00) Mid-Atlantic","value":-2},
+    {"label":"(GMT-01:00) Cape Verde Is. Azores","value":-1},
+    {"label":"(GMT+00:00) Dublin, Edinburgh, Lisbon, London, Casablanca, Monrovia, Reykjavik","value":0},
+    {"label":"(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Vienna,, Budapest, Prague, Brussels, Copenhagen, Madrid, Paris","value":1},
+    {"label":"(GMT+02:00) Athens, Bucharest, Istanbul","value":2},
+    {"label":"(GMT+03:00) Moscow, St. Petersburg, Kuwait, Riyadh, Baghdad","value":3},
+    {"label":"(GMT+04:00) Abu Dhabi, Muscat","value":4},
+    {"label":"(GMT+04:30) Kabul","value":4.5},
+    {"label":"(GMT+05:00) Islamabad, Karachi, Tashkent, Yekaterinburg","value":5},
+    {"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi, Sri Jayawardenapura","value":5.5},
+    {"label":"(GMT+05:45) Kathmandu","value":5.75},
+    {"label":"(GMT+06:00) Astana, Dhakam, Almaty, Novosibirsk","value":6},
+    {"label":"(GMT+06:30) Yangon (Rangoon)","value":6.5},
+    {"label":"(GMT+07:00) Bangkok, Hanoi, Jakarta, Krasnoyarsk","value":7},
+    {"label":"(GMT+08:00) Beijing, Taipei, Hong Kong, Urumqi, Kuala Lumpur, Singapore","value":8},
+    {"label":"(GMT+09:00) Osaka, Sapporo, Tokyo, Seoul","value":9},
+    {"label":"(GMT+09:30) Adelaide, Darwin","value":9.5},
+    {"label":"(GMT+10:00) Brisbane, Canberra, Melbourne, Sydney, Hobart, Gua, Vladivostok","value":10},
+    {"label":"(GMT+11:00) Magadan, Solomon Is., New Caledonia","value":11},
+    {"label":"(GMT+12:00) Auckland, Wellington, Fiji, Kamchatka, Marshall Is.","value":12},
+    {"label":"(GMT+13:00) Nuku'alofa","value":13}
 ]
+
+let dstTimezones = [
+    {"label":"(GMT-12:00) International Date Line West","value":-12},
+    {"label":"(GMT-11:00) Midway Island, Samoa","value":-11},
+    {"label":"(GMT-10:00) Hawaii","value":-10},
+    {"label":"(GMT-08:00) Alaska","value":-8},
+    {"label":"(GMT-07:00) Pacific Time (US & Canada)","value":-7},
+    {"label":"(GMT-06:00) Arizona, Mountain Time (US & Canada)","value":-6},
+    {"label":"(GMT-05:00) Central Time (US & Canada)","value":-5},
+    {"label":"(GMT-04:00) Eastern Time (US & Canada)","value":-4},
+    {"label":"(GMT-04:00) Atlantic Time (Canada)","value":-4},
+    {"label":"(GMT-03:30) Newfoundland","value":-3.5},
+    {"label":"(GMT-03:00) Brasilia, Buenos Aires, Georgetown, Greenland, Montevideo","value":-3},
+    {"label":"(GMT-02:00) Mid-Atlantic","value":-2},
+    {"label":"(GMT-01:00) Cape Verde Is. Azores","value":-1},
+    {"label":"(GMT+00:00) Dublin, Edinburgh, Lisbon, London, Casablanca, Monrovia, Reykjavik","value":0},
+    {"label":"(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Vienna,, Budapest, Prague, Brussels, Copenhagen, Madrid, Paris","value":1},
+    {"label":"(GMT+02:00) Athens, Bucharest, Istanbul","value":2},
+    {"label":"(GMT+03:00) Moscow, St. Petersburg, Kuwait, Riyadh, Baghdad","value":3},
+    {"label":"(GMT+04:00) Abu Dhabi, Muscat","value":4},
+    {"label":"(GMT+04:30) Kabul","value":4.5},
+    {"label":"(GMT+05:00) Islamabad, Karachi, Tashkent, Yekaterinburg","value":5},
+    {"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi, Sri Jayawardenapura","value":5.5},
+    {"label":"(GMT+05:45) Kathmandu","value":5.75},
+    {"label":"(GMT+06:00) Astana, Dhakam, Almaty, Novosibirsk","value":6},
+    {"label":"(GMT+06:30) Yangon (Rangoon)","value":6.5},
+    {"label":"(GMT+07:00) Bangkok, Hanoi, Jakarta, Krasnoyarsk","value":7},
+    {"label":"(GMT+08:00) Beijing, Taipei, Hong Kong, Urumqi, Kuala Lumpur, Singapore","value":8},
+    {"label":"(GMT+09:00) Osaka, Sapporo, Tokyo, Seoul","value":9},
+    {"label":"(GMT+09:30) Adelaide, Darwin","value":9.5},
+    {"label":"(GMT+10:00) Brisbane, Canberra, Melbourne, Sydney, Hobart, Gua, Vladivostok","value":10},
+    {"label":"(GMT+11:00) Magadan, Solomon Is., New Caledonia","value":11},
+    {"label":"(GMT+12:00) Auckland, Wellington, Fiji, Kamchatka, Marshall Is.","value":12},
+    {"label":"(GMT+13:00) Nuku'alofa","value":13}
+]
+
 
 let times = [
     {"label": "0am", value: 0},
@@ -126,46 +131,86 @@ let times = [
     {"label": "11pm", value: 23},
 ]
 
+function isDST() {
+    const d = new Date();
+    let jan = new Date(d.getFullYear(), 0, 1).getTimezoneOffset();
+    let jul = new Date(d.getFullYear(), 6, 1).getTimezoneOffset();
+    return Math.max(jan, jul) !== d.getTimezoneOffset();    
+}
+
 function init(){
-     let des = document.getElementById("destination"),
+    const defaultWorkTimezoneInt = 0 - (new Date().getTimezoneOffset() / 60);        
+    const des = document.getElementById("destination"),
          work = document.getElementById("workzone");
+    
+    const tz = isDST() ? dstTimezones : timezones;
 
-     for (var i = 0; i < tzs.length; i++){
-       let tz = tzs[i],
-           option = document.createElement("option");
-
-        option.text = tz.label;
-        option.value = tz.value;
-        let workOption = option.cloneNode(true);
-        des.add(option)
-        work.add(workOption)
+    for (var i = 0; i < timezones.length; i++){
+        insertOption(tz[i], des, tz[i].value == 9);   // default to tokyo
+        insertOption(tz[i], work, tz[i].value == defaultWorkTimezoneInt); // default to current
      }
 
-     for (var i = 0; i < times.length; i++) {
-        let option = document.createElement("option");
-        option.text = times[i].label;
-        option.value = times[i].value;
-     }
+     const startWork = document.getElementById("start"),
+        endWork = document.getElementById("end");
+
+    for (var i = 0; i < times.length; i++) {
+        insertOption(times[i], startWork, i == 9);
+        insertOption(times[i], endWork, i == 17);
+    }
+
+    const hint = document.getElementById("hint");
+    hint.textContent = "You're currently " + (isDST() ? "in " : "") + "Daylight Saving (fuck this shit). Your destination hours may change depending on your travel plan."
+}
+
+function insertOption(object, select, selected) {
+    const option = document.createElement("option");
+    option.text = object.label;
+    option.value = object.value;
+    option.selected = selected;
+    select.add(option);
 }
 
 function calculate() {
-
+    const des = document.getElementById("destination").value,
+        work = document.getElementById("workzone").value;
+        start = document.getElementById("start").value;
+        end = document.getElementById("end").value;
+    const diff = des - work;
+    const desStartInt = (start + diff) % 23,
+        desEndInt = (end + diff) % 23;
+    const desStart = document.getElementById("desStart"),
+        desEnd = document.getElementById("desEnd");
+    console.log({des, work, start, end, diff});
+    desStart.textContent = times.find((time, value) => time.value == desStartInt).label;
+    desEnd.textContent = times.find((time, value) => time.value == desEndInt).label;
 }
 
 </script>
 <body onload="init();">
     <h2>Pick your travel destination and work zone</h2>
+    <h3 class="hint" id="hint"></h3>
     <div class="container">
-        <select id="destination"><option value="" disabled selected>Destination timezone</option></select>
-        <select id="workzone"><option value="" disabled selected>Work timezone</option></select>
+        <div class="dropdown">
+            <h2>Travel Destination Timezone</h2>
+            <select id="destination"></select>
+        </div>
+        <div class="dropdown">
+            <h2>Work Timezone</h2>
+            <select id="workzone"></select>
+        </div>
     </div>
-    <button>Calculate</button>
-    <h2>Pick your work zone work hours </h2>
+    <button onclick="calculate();">Calculate</button>
     <div class="container">
-        <select id="start"><option value={9} disabled selected>9am</option></select>
-        <select id="workzone"><option value={17} disabled selected>5pm</option></select>
+        <div class="dropdown">
+            <h2>Start work at</h2>
+            <select id="start"></select>
+        </div>
+        <div class="dropdown">
+            <h2>End work at</h2>
+            <select id="end"></select>
+        </div>
     </div>
     <div class="time">
-        Your local work hour will be: <label name="start">9am</label> ~ <label name="end">5pm</label>
+        Your local work hour will be: <label id="desStart">1am</label> ~ <label id="desEnd">9am</label>
     </div>
 </body>
