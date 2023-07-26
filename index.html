@@ -1,7 +1,9 @@
 <!-- Code from https://stackoverflow.com/questions/39263321/javascript-get-html-timezone-dropdown -->
 <style>
-    select {
-        width: 400px;
+    html * {
+        font-family: roboto,sans-serif;
+    }
+    datalist {
         padding: 4px;
     }
 
@@ -10,8 +12,9 @@
         font-size: 24px;
     }
 
-    .hint {
-        color: orangered;
+    a {
+        color: #7AA874;
+        text-decoration: none; 
     }
 
     .container {
@@ -20,7 +23,7 @@
     }
 
     .dropdown {
-        width: 400px;
+        width: 240px;
         display: flex;
         flex-direction: column;
         padding: 4px;
@@ -29,86 +32,22 @@
     .time {
         font-size: 24px;
         margin-top: 16px;
+        color:#7AA874;
+        font-weight: bold;
     }
+
+    .inlineHeader {
+        display: inline;
+    }
+
 </style>
 <script>
-
-let timezones = [
-    {"label":"(GMT-12:00) International Date Line West","value":-12},
-    {"label":"(GMT-11:00) Midway Island, Samoa","value":-11},
-    {"label":"(GMT-10:00) Hawaii","value":-10},
-    {"label":"(GMT-09:00) Alaska","value":-9},
-    {"label":"(GMT-08:00) Pacific Time (US & Canada), Tijuana, Baja California","value":-8},
-    {"label":"(GMT-07:00) Arizona, Mountain Time (US & Canada)","value":-7},
-    {"label":"(GMT-06:00) Central Time (US & Canada)","value":-6},
-    {"label":"(GMT-05:00) Eastern Time (US & Canada), Bogota, Lima, Quito, Rio Branco","value":-5},
-    {"label":"(GMT-04:00) Atlantic Time (Canada), Caracas, La Paz, Manaus, Santiago","value":-4},
-    {"label":"(GMT-03:30) Newfoundland","value":-3.5},
-    {"label":"(GMT-03:00) Brasilia, Buenos Aires, Georgetown, Greenland, Montevideo","value":-3},
-    {"label":"(GMT-02:00) Mid-Atlantic","value":-2},
-    {"label":"(GMT-01:00) Cape Verde Is. Azores","value":-1},
-    {"label":"(GMT+00:00) Dublin, Edinburgh, Lisbon, London, Casablanca, Monrovia, Reykjavik","value":0},
-    {"label":"(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Vienna,, Budapest, Prague, Brussels, Copenhagen, Madrid, Paris","value":1},
-    {"label":"(GMT+02:00) Athens, Bucharest, Istanbul","value":2},
-    {"label":"(GMT+03:00) Moscow, St. Petersburg, Kuwait, Riyadh, Baghdad","value":3},
-    {"label":"(GMT+04:00) Abu Dhabi, Muscat","value":4},
-    {"label":"(GMT+04:30) Kabul","value":4.5},
-    {"label":"(GMT+05:00) Islamabad, Karachi, Tashkent, Yekaterinburg","value":5},
-    {"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi, Sri Jayawardenapura","value":5.5},
-    {"label":"(GMT+05:45) Kathmandu","value":5.75},
-    {"label":"(GMT+06:00) Astana, Dhakam, Almaty, Novosibirsk","value":6},
-    {"label":"(GMT+06:30) Yangon (Rangoon)","value":6.5},
-    {"label":"(GMT+07:00) Bangkok, Hanoi, Jakarta, Krasnoyarsk","value":7},
-    {"label":"(GMT+08:00) Beijing, Taipei, Hong Kong, Urumqi, Kuala Lumpur, Singapore","value":8},
-    {"label":"(GMT+09:00) Osaka, Sapporo, Tokyo, Seoul","value":9},
-    {"label":"(GMT+09:30) Adelaide, Darwin","value":9.5},
-    {"label":"(GMT+10:00) Brisbane, Canberra, Melbourne, Sydney, Hobart, Gua, Vladivostok","value":10},
-    {"label":"(GMT+11:00) Magadan, Solomon Is., New Caledonia","value":11},
-    {"label":"(GMT+12:00) Auckland, Wellington, Fiji, Kamchatka, Marshall Is.","value":12},
-    {"label":"(GMT+13:00) Nuku'alofa","value":13}
-]
-
-let dstTimezones = [
-    {"label":"(GMT-12:00) International Date Line West","value":-12},
-    {"label":"(GMT-11:00) Midway Island, Samoa","value":-11},
-    {"label":"(GMT-10:00) Hawaii","value":-10},
-    {"label":"(GMT-08:00) Alaska","value":-8},
-    {"label":"(GMT-07:00) Pacific Time (US & Canada)","value":-7},
-    {"label":"(GMT-06:00) Arizona, Mountain Time (US & Canada)","value":-6},
-    {"label":"(GMT-05:00) Central Time (US & Canada)","value":-5},
-    {"label":"(GMT-04:00) Eastern Time (US & Canada)","value":-4},
-    {"label":"(GMT-04:00) Atlantic Time (Canada)","value":-4},
-    {"label":"(GMT-03:30) Newfoundland","value":-3.5},
-    {"label":"(GMT-03:00) Brasilia, Buenos Aires, Georgetown, Greenland, Montevideo","value":-3},
-    {"label":"(GMT-02:00) Mid-Atlantic","value":-2},
-    {"label":"(GMT-01:00) Cape Verde Is. Azores","value":-1},
-    {"label":"(GMT+00:00) Dublin, Edinburgh, Lisbon, London, Casablanca, Monrovia, Reykjavik","value":0},
-    {"label":"(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Vienna,, Budapest, Prague, Brussels, Copenhagen, Madrid, Paris","value":1},
-    {"label":"(GMT+02:00) Athens, Bucharest, Istanbul","value":2},
-    {"label":"(GMT+03:00) Moscow, St. Petersburg, Kuwait, Riyadh, Baghdad","value":3},
-    {"label":"(GMT+04:00) Abu Dhabi, Muscat","value":4},
-    {"label":"(GMT+04:30) Kabul","value":4.5},
-    {"label":"(GMT+05:00) Islamabad, Karachi, Tashkent, Yekaterinburg","value":5},
-    {"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi, Sri Jayawardenapura","value":5.5},
-    {"label":"(GMT+05:45) Kathmandu","value":5.75},
-    {"label":"(GMT+06:00) Astana, Dhakam, Almaty, Novosibirsk","value":6},
-    {"label":"(GMT+06:30) Yangon (Rangoon)","value":6.5},
-    {"label":"(GMT+07:00) Bangkok, Hanoi, Jakarta, Krasnoyarsk","value":7},
-    {"label":"(GMT+08:00) Beijing, Taipei, Hong Kong, Urumqi, Kuala Lumpur, Singapore","value":8},
-    {"label":"(GMT+09:00) Osaka, Sapporo, Tokyo, Seoul","value":9},
-    {"label":"(GMT+09:30) Adelaide, Darwin","value":9.5},
-    {"label":"(GMT+10:00) Brisbane, Canberra, Melbourne, Sydney, Hobart, Gua, Vladivostok","value":10},
-    {"label":"(GMT+11:00) Magadan, Solomon Is., New Caledonia","value":11},
-    {"label":"(GMT+12:00) Auckland, Wellington, Fiji, Kamchatka, Marshall Is.","value":12},
-    {"label":"(GMT+13:00) Nuku'alofa","value":13}
-]
-
 
 let times = [
     {"label": "0am", value: 0},
     {"label": "1am", value: 1},
     {"label": "2am", value: 2},
-    {"label": "3am", value: 4},
+    {"label": "3am", value: 3},
     {"label": "4am", value: 4},
     {"label": "5am", value: 5},
     {"label": "6am", value: 6},
@@ -131,6 +70,9 @@ let times = [
     {"label": "11pm", value: 23},
 ]
 
+const TIMEZONES = Intl.supportedValuesOf('timeZone');
+let workInputValue, desInputValue, startInputValue, endInputValue;
+
 function isDST() {
     const d = new Date();
     let jan = new Date(d.getFullYear(), 0, 1).getTimezoneOffset();
@@ -138,79 +80,103 @@ function isDST() {
     return Math.max(jan, jul) !== d.getTimezoneOffset();    
 }
 
-function init(){
-    const defaultWorkTimezoneInt = 0 - (new Date().getTimezoneOffset() / 60);        
+function init(){     
     const des = document.getElementById("destination"),
          work = document.getElementById("workzone");
-    
-    const tz = isDST() ? dstTimezones : timezones;
+         workinput = document.getElementById("workInput");
+         desInput = document.getElementById("desInput");
+         startInput = document.getElementById("start");
+         endInput = document.getElementById("end");
 
-    for (var i = 0; i < timezones.length; i++){
-        insertOption(tz[i], des, tz[i].value == 9);   // default to tokyo
-        insertOption(tz[i], work, tz[i].value == defaultWorkTimezoneInt); // default to current
+    workinput.placeholder = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    workInputValue = workinput.placeholder;
+    desInputValue = 'Asia/Tokyo';
+    startInputValue = 9;
+    endInputValue = 17;
+
+    for (var i = 0; i < TIMEZONES.length; i++){
+        insertOption(TIMEZONES[i], des, false);
+        insertOption(TIMEZONES[i], work, false);
      }
 
-     const startWork = document.getElementById("start"),
-        endWork = document.getElementById("end");
-
     for (var i = 0; i < times.length; i++) {
-        insertOption(times[i], startWork, i == 9);
-        insertOption(times[i], endWork, i == 17);
+        insertOption(times[i], startInput, i == 9);
+        insertOption(times[i], endInput, i == 17);
     }
-
-    const hint = document.getElementById("hint");
-    hint.textContent = "You're currently " + (isDST() ? "in " : "") + "Daylight Saving (fuck this shit). Your destination hours may change depending on your travel plan."
+    workInput.oninput = (i) => {workInputValue = i.target.value; calculate();};
+    desInput.oninput = (i) => {desInputValue = i.target.value; calculate();};
+    startInput.addEventListener("change", (i) => {startInputValue = i.target.value; calculate()})
+    endInput.addEventListener("change", (i) => {endInputValue = i.target.value; calculate()})
 }
 
-function insertOption(object, select, selected) {
+function insertOption(object, root, selected) {
     const option = document.createElement("option");
-    option.text = object.label;
-    option.value = object.value;
-    option.selected = selected;
-    select.add(option);
+    if (root.nodeName == "DATALIST") {
+        option.value = object;
+        root.appendChild(option);
+    } else if (root.nodeName == "SELECT") {
+        option.value = object.value;
+        option.text = object.label;
+        root.add(option);
+        option.selected = selected;
+    }
 }
+
+// https://stackoverflow.com/questions/10087819/convert-date-to-another-timezone-in-javascript
+function convertTZ(date, tzString) {
+    if (TIMEZONES.includes(tzString)) {
+        return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
+    }
+    return null;
+}
+
 
 function calculate() {
-    const des = document.getElementById("destination").value,
-        work = document.getElementById("workzone").value;
-        start = document.getElementById("start").value;
-        end = document.getElementById("end").value;
-    const diff = des - work;
-    const desStartInt = (start + diff) % 23,
-        desEndInt = (end + diff) % 23;
     const desStart = document.getElementById("desStart"),
         desEnd = document.getElementById("desEnd");
-    console.log({des, work, start, end, diff});
-    desStart.textContent = times.find((time, value) => time.value == desStartInt).label;
-    desEnd.textContent = times.find((time, value) => time.value == desEndInt).label;
+
+    const now = new Date();
+    const workDate = convertTZ(now, workInputValue);
+    const desDate = convertTZ(now, desInputValue);
+    if (workDate == null || desDate == null) {
+        return;
+    }
+    const diff = workDate.getHours() - desDate.getHours();
+    const desStartHour = (startInputValue - diff + 24) % 24;
+    const desEndHour = (endInputValue - diff + 24) % 24;
+    desStart.textContent = times.find((t) => t.value == desStartHour).label;
+    desEnd.textContent = times.find((t) => t.value == desEndHour).label;
 }
 
 </script>
 <body onload="init();">
-    <h2>Pick your travel destination and work zone</h2>
-    <h3 class="hint" id="hint"></h3>
+    <h2 class="inlineHeader">Pick your travel destination and pretend to work zone</h2>
+    <a href="blog.douchi.space" target="_blank"><h3>by <img src="dino.gif" width="24"/> Mt.Front <img src="dino.gif" width="24"/></h3></a>
+    *For list of timezones see <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">wikipedia</a>
     <div class="container">
         <div class="dropdown">
-            <h2>Travel Destination Timezone</h2>
-            <select id="destination"></select>
+            <h3>Travel Timezone</h3>
+            <datalist id="destination"></datalist>
+            <input id="desInput" autocomplete="on" list="destination" placeholder="Asia/Tokyo" />
         </div>
         <div class="dropdown">
-            <h2>Work Timezone</h2>
-            <select id="workzone"></select>
+            <h3>Work Timezone</h3>
+            <datalist id="workzone"></datalist>
+            <input id="workInput" autocomplete="on" list="workzone" />
         </div>
     </div>
-    <button onclick="calculate();">Calculate</button>
     <div class="container">
         <div class="dropdown">
-            <h2>Start work at</h2>
-            <select id="start"></select>
+            <h3>Start work at</h3>
+            <select id="start" ></select>
         </div>
         <div class="dropdown">
-            <h2>End work at</h2>
-            <select id="end"></select>
+            <h3>End work at</h3>
+            <select id="end" ></select>
         </div>
     </div>
-    <div class="time">
-        Your local work hour will be: <label id="desStart">1am</label> ~ <label id="desEnd">9am</label>
-    </div>
+    <br />
+    <h2 class="inlineHeader">Your local work hour will be:</h2>
+    <label class="time" id="desStart">1am</label> ~ <label class="time" id="desEnd">9am</label>
+    Enjoy working remotely :)
 </body>
